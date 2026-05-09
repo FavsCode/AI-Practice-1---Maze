@@ -1,6 +1,6 @@
 """Tests for the Agent."""
 from agent import Agent
-from display.mazes import maze # Temporary import for testing purposes
+from display.mazes import maze_1 as maze # Temporary import for testing purposes
 
 def test_agent_initialization() -> None:
     agent = Agent(maze)

@@ -1,5 +1,5 @@
 """Handles the Agent class, including its memory and decision-making process for navigating the maze."""
-from display.mazes import maze # Temporary import for testing purposes
+from display.mazes import maze_1 as maze # Temporary import for testing purposes
 import random
 
 class Agent:
@@ -57,11 +57,8 @@ class Agent:
         
         move = self.calculate_move_values(available_spaces)
     
-        self.steps += 1 # Increment the steps taken after choosing a move
+        self.steps += 1
         self.visited_count[current_pos] += 1 # Mark the current position as visited and add the penalty for visiting it again
-        print(f"Visited count: {self.visited_count}") # Debugging: Show the visited count for each position after choosing a move
-        return move
-        # print("Visited count:", AI.visited_count) # Debugging: Show the visited count for each position
         
     def calculate_move_values(self, available_spaces) -> tuple:
         """ Calculate values for each available move based on the visited count and other factors to encourage exploration and exploitation. """
@@ -73,13 +70,8 @@ class Agent:
                 values[pos] = 0 # In the beginning, all moves are the optimal move
         
         for pos in values: # Create the list of optimal moves based on the values calculated
-            print(f"Calculating value for move: {pos}") # Debugging: Show which move is being calculated
-            print(f"{self.visited_count} ") # Debugging: Show the visited count for the move being calculated
-            print(f"Current visited count for {pos}: {self.visited_count[pos]}") # Debugging: Show the visited count for the move being calculated
-            visit_score = self.visited_count[pos] # Calculate a score based on how many times the move has been visited
-            values[pos] -= visit_score # Subtract the visit score from the move's value to penalize moves that have been visited more often
-        
-        # print(f"Move values: {values}") # Debugging: Show the values of available moves
+            visit_score = self.visited_count[pos] 
+            values[pos] -= visit_score
 
         exploration_rate = max(0.05, 0.25 - self.steps * 0.002) # Decrease exploration rate over time, but never go below 5%
         if len(values) <= 2:
@@ -90,9 +82,6 @@ class Agent:
         else: # Exploit
             move = max(values, key=lambda pos:values[pos]) # Choose the move with the highest value (smallest penalty)
             moves: list[tuple] = [pos for pos in values if values[pos] == values[move]] # Get all moves that have the same lowest value
-            best_move = random.choice(moves) # Randomly choose among the best moves if there are multiple with the same value
+            best_move = random.choice(moves)
             return best_move
         
-            # print(f"Chosen move: {move} with value: {values[move]}") # Debugging: Show the chosen move and its value
-            # print(f"Best moves: {moves}") # Debugging: Show all the best moves with the same value
-            
