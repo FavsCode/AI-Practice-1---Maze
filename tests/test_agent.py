@@ -1,6 +1,6 @@
 """Tests for the Agent."""
 from agent import Agent
-from display.mazes import maze_1 as maze # Temporary import for testing purposes
+from display.mazes import maze_2 as maze # Temporary import for testing purposes
 
 def test_agent_initialization() -> None:
     agent = Agent(maze)
@@ -17,6 +17,7 @@ def test_find_available_spaces() -> None:
 def test_choose_move() -> None:
     agent = Agent(maze)
     move = agent.choose_move()
+    
     assert move in [(1, 2), (2, 1)] # The chosen move should be one of the available spaces from the starting position
     assert agent.visited_count[(1, 1)] == 1 # The starting position should now be marked as visited
     assert agent.steps == 1 # The Agent just took a step

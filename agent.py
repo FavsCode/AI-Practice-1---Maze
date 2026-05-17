@@ -1,5 +1,5 @@
 """Handles the Agent class, including its memory and decision-making process for navigating the maze."""
-from display.mazes import maze_1 as maze # Temporary import for testing purposes
+from display.mazes import maze_2 as maze # Temporary import for testing purposes
 import random
 
 class Agent:
@@ -18,16 +18,16 @@ class Agent:
         """ Initialize the agent's starting position based on the location of "S" in the maze. """
         for i in range(len(maze)):
             for j in range(len(maze[i])):
+                print(f"Checking position ({i}, {j}): {maze[i][j]}") # Debugging: Show the current position being checked and its value
                 if maze[i][j] == "S":
                     self.position = (i, j)
-        try: 
-            self.position
-        except AttributeError: # If the position attribute was not set, it means the start position "S" was not found in the maze
-            raise ValueError("Start position 'S' not found in the maze.")
+                    return
+                
+        raise ValueError("Start position 'S' not found in the maze.")
     
     def find_available_spaces(self, maze) -> list[tuple]:
         """ Find available spaces around the current position that are not walls. If the goal is found, return it immediately as the only available move."""
-        x, y = self.position # type: ignore 
+        x, y = self.position 
         spaces = []
         spaces_to_check = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
         for space in spaces_to_check:
@@ -59,6 +59,7 @@ class Agent:
     
         self.steps += 1
         self.visited_count[current_pos] += 1 # Mark the current position as visited and add the penalty for visiting it again
+        return move
         
     def calculate_move_values(self, available_spaces) -> tuple:
         """ Calculate values for each available move based on the visited count and other factors to encourage exploration and exploitation. """
