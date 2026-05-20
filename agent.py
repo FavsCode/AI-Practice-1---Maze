@@ -10,7 +10,6 @@ class Agent:
         self.move_values = {}
 
         # Current state
-        self.maze: list[list] = maze
         self.init_start_pos(maze) 
         self.steps = 0 # Keep track of the number of steps taken to adjust exploration rate over time
 
@@ -18,7 +17,6 @@ class Agent:
         """ Initialize the agent's starting position based on the location of "S" in the maze. """
         for i in range(len(maze)):
             for j in range(len(maze[i])):
-                print(f"Checking position ({i}, {j}): {maze[i][j]}") # Debugging: Show the current position being checked and its value
                 if maze[i][j] == "S":
                     self.position = (i, j)
                     return
@@ -30,6 +28,7 @@ class Agent:
         x, y = self.position 
         spaces = []
         spaces_to_check = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
+
         for space in spaces_to_check:
             if maze[space[0]][space[1]] == "G":
                 return [(space[0], space[1])] # If the goal is found, set the position to the goal and return immediately
@@ -38,10 +37,10 @@ class Agent:
         
         return spaces
 
-    def choose_move(self) -> tuple | None:
+    def choose_move(self, maze) -> tuple | None:
         """ Choose the next move based on the available spaces and the visited count to encourage exploration and exploitation. """
         available_spaces = self.find_available_spaces(maze)
-        
+
         for pos in available_spaces:
             if pos not in self.visited_count:
                 self.visited_count[pos] = 0 # Initialize visit count for new positions that become available
@@ -53,19 +52,23 @@ class Agent:
             self.visited_count[current_pos] = 0 # Initialize visit count for the current position if it hasn't been visited before
             
         if maze[self.position[0]][self.position[1]] == "G":
+            self.steps += 1
+            self.visited_count[current_pos] += 1 # Mark the current position as visited and add the penalty for visiting it again
+            self.position = (self.position[0], self.position[1])
             return self.position  # Goal reached, return the current position as the move to make
         
         move = self.calculate_move_values(available_spaces)
     
         self.steps += 1
         self.visited_count[current_pos] += 1 # Mark the current position as visited and add the penalty for visiting it again
+        self.position = move # Update the agent's position to the chosen move
         return move
         
     def calculate_move_values(self, available_spaces) -> tuple:
         """ Calculate values for each available move based on the visited count and other factors to encourage exploration and exploitation. """
         # Function depends on the visited_count dictionary, which is updated in the choose_move method, so it should be called using the choose_move method.
         values = {}
-
+        
         for pos in available_spaces:
             if pos not in values:
                 values[pos] = 0 # In the beginning, all moves are the optimal move

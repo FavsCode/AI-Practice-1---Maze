@@ -3,6 +3,7 @@
 # - " " for open paths
 # - "S" for the starting position
 # - "G" for the goal position
+# ALL test mazes are compatible with the tests in tests/test_agent.py, so feel free to switch between them for testing purposes.
 
 maze_1 = [
     ["#", "#", "#", "#", "#", "#", "#", "#", "#", "#"],
