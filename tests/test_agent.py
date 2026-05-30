@@ -1,6 +1,6 @@
 """Tests for the Agent."""
 from agent import Agent
-from display.mazes import maze_3 as maze # Temporary import for testing purposes
+from tests.mazes import maze_1 as maze # All three test mazes should be cycled through, and all should pass the tests.
 import copy
 
 def test_agent_initialization() -> None:
@@ -98,3 +98,9 @@ def test_agent_solve_maze() -> None:
             break # The agent has reached the goal, exit the loop
     
     assert maze[agent.position[0]][agent.position[1]] == "G" # The agent should have reached the goal at the end of this process
+
+def test_agent_step_counter() -> None:
+    agent = Agent(maze)
+    initial_steps = agent.steps
+    agent.choose_move(maze) # Make a move
+    assert agent.steps == initial_steps + 1 # The steps counter should increment by 1 after a move

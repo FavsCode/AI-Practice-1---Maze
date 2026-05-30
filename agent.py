@@ -1,5 +1,5 @@
 """Handles the Agent class, including its memory and decision-making process for navigating the maze."""
-from display.mazes import maze_2 as maze # Temporary import for testing purposes
+from tests.mazes import maze_2 as maze # Temporary import for testing purposes
 import random
 
 class Agent:
